@@ -4,11 +4,11 @@
  */
 package javaapplication7;
 
-import com.sun.jdi.connect.spi.Connection;
 import java.util.Date;
 import javax.swing.JOptionPane;
 import java.sql.*;
 import java.sql.PreparedStatement;
+import java.text.SimpleDateFormat;
 
 /**
  *
@@ -24,7 +24,26 @@ public class SignuUpPage extends javax.swing.JFrame {
     }
     String studentName,rollNumber,contactNumber,fatherName,email,password,confirmPassword;
     Date dateOfBirth;
-
+        int id = 0;
+    
+            public int getId(){
+                ResultSet rs = null;
+                try{
+                    Class.forName("com.mysql.cj.jdbc.Driver");
+            java.sql.Connection con = (java.sql.Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/fees_mange_sys","root","Chirag@123");
+             String sqlcon = "select max(id) from signup";
+                  Statement st = con.createStatement();
+                  rs = st.executeQuery(sqlcon);
+                  while(rs.next()){
+                      
+                      id=rs.getInt(1);
+                      id++;
+                  }
+                }catch(Exception ex){
+                    ex.printStackTrace();
+                }
+              return id;
+            }
         public boolean validation()
         {
             studentName=txt_StudentName.getText();
@@ -114,30 +133,38 @@ public class SignuUpPage extends javax.swing.JFrame {
          }
          
          
-         public class MySqlConnection extends javax.swing.JFrame {
-//             private final static String username= "root";
-//             private final static String password= "Chirag@123";
-//             private final static String URL= "jdbc:mysql://localhost:3306/signuupdb";
-//              
-//             Connection con = null;
-//             PreparedStatement stmt = null;
-    
-}
-         Connection con;
-         PreparedStatement stmt;
+        
          
-        boolean insertDetails(){
-             try{
-                 Class.forName("com.mysql.cj.jdbc.Driver");
-                  con = (Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/signuupdb","root","Chirag@123");
-                 String sqlcon = "insert into signup values(?,?,?,?,?,?,?,?)";
-                stmt = con.prepareStatement(sqlon);
-                
-             }catch(Exception e){
-                 e.printStackTrace();
-             }
-         }
-
+         
+       void insertDetails(){
+           SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+          String mydateOfBirth =format.format(dateOfBirth );
+              try {
+            // TODO code application logic here
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            java.sql.Connection con = (java.sql.Connection) DriverManager.getConnection("jdbc:mysql://localhost:3306/fees_mange_sys","root","Chirag@123");
+             String sqlcon = "insert into signup values(?,?,?,?,?,?,?,?)";
+            PreparedStatement stmt = con.prepareStatement(sqlcon);
+            stmt.setInt(1, getId());
+           stmt.setString(2,studentName );
+           stmt.setString(3, rollNumber);
+           stmt.setString(4, mydateOfBirth);
+            stmt.setString(5, fatherName);
+             stmt.setString(6, contactNumber);
+             stmt.setString(7, email);
+             stmt.setString(8, password);
+          int i =  stmt.executeUpdate();
+          if(i>0){
+              JOptionPane.showMessageDialog(this, "New Student Registered");
+          }
+          else{
+              JOptionPane.showMessageDialog(this, "Failed! Try Again");
+          }
+        } catch (Exception ex) {
+           ex.printStackTrace();
+        }
+            
+        }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -170,14 +197,13 @@ public class SignuUpPage extends javax.swing.JFrame {
         jLabel11 = new javax.swing.JLabel();
         txt_Password = new javax.swing.JPasswordField();
         txt_ConfirmPassword = new javax.swing.JPasswordField();
-        jLabel12 = new javax.swing.JLabel();
         btn_SignUp = new javax.swing.JButton();
         btn_Login = new javax.swing.JButton();
-        jLabel13 = new javax.swing.JLabel();
         lbl_ContactNumber = new javax.swing.JLabel();
         lbl_Password = new javax.swing.JLabel();
         lbl_RollNumber = new javax.swing.JLabel();
         lbl_ConfirmPassword = new javax.swing.JLabel();
+        jLabel12 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -344,31 +370,29 @@ public class SignuUpPage extends javax.swing.JFrame {
             }
         });
 
-        jLabel12.setIcon(new javax.swing.ImageIcon(getClass().getResource("/javaapplication7/images/signup.png"))); // NOI18N
-
-        btn_SignUp.setBackground(new java.awt.Color(153, 255, 204));
-        btn_SignUp.setFont(new java.awt.Font("Segoe UI", 3, 24)); // NOI18N
-        btn_SignUp.setForeground(new java.awt.Color(255, 0, 102));
+        btn_SignUp.setBackground(new java.awt.Color(0, 102, 102));
+        btn_SignUp.setFont(new java.awt.Font("Segoe UI", 3, 18)); // NOI18N
+        btn_SignUp.setForeground(new java.awt.Color(255, 255, 255));
+        btn_SignUp.setIcon(new javax.swing.ImageIcon(getClass().getResource("/javaapplication7/images/signup.png"))); // NOI18N
         btn_SignUp.setText("Sign-Up");
-        btn_SignUp.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 0, 51), 4));
+        btn_SignUp.setBorder(null);
         btn_SignUp.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_SignUpActionPerformed(evt);
             }
         });
 
-        btn_Login.setBackground(new java.awt.Color(153, 255, 204));
-        btn_Login.setFont(new java.awt.Font("Segoe UI", 3, 24)); // NOI18N
-        btn_Login.setForeground(new java.awt.Color(255, 0, 102));
+        btn_Login.setBackground(new java.awt.Color(0, 102, 102));
+        btn_Login.setFont(new java.awt.Font("Segoe UI", 3, 18)); // NOI18N
+        btn_Login.setForeground(new java.awt.Color(255, 255, 255));
+        btn_Login.setIcon(new javax.swing.ImageIcon(getClass().getResource("/javaapplication7/images/login.png"))); // NOI18N
         btn_Login.setText("Login");
-        btn_Login.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 0, 51), 4));
+        btn_Login.setBorder(null);
         btn_Login.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_LoginActionPerformed(evt);
             }
         });
-
-        jLabel13.setIcon(new javax.swing.ImageIcon(getClass().getResource("/javaapplication7/images/login.png"))); // NOI18N
 
         lbl_ContactNumber.setFont(new java.awt.Font("Segoe UI", 3, 17)); // NOI18N
         lbl_ContactNumber.setForeground(new java.awt.Color(255, 0, 102));
@@ -381,6 +405,10 @@ public class SignuUpPage extends javax.swing.JFrame {
 
         lbl_ConfirmPassword.setFont(new java.awt.Font("Segoe UI", 3, 17)); // NOI18N
         lbl_ConfirmPassword.setForeground(new java.awt.Color(255, 0, 102));
+
+        jLabel12.setFont(new java.awt.Font("Segoe UI Black", 3, 18)); // NOI18N
+        jLabel12.setForeground(new java.awt.Color(255, 51, 51));
+        jLabel12.setText("Created By Chirag Vohra");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -405,36 +433,38 @@ public class SignuUpPage extends javax.swing.JFrame {
                             .addComponent(jLabel11)
                             .addGap(7, 7, 7)))
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(30, 30, 30)
-                        .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(77, 77, 77)
                         .addComponent(btn_SignUp, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(29, 29, 29)))
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(txt_StudentName)
-                    .addComponent(txt_RollNumber)
-                    .addComponent(txt_DateOfBirth, javax.swing.GroupLayout.DEFAULT_SIZE, 187, Short.MAX_VALUE)
-                    .addComponent(txt_FatherName)
-                    .addComponent(txt_ContactNumber, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(txt_Email)
-                    .addComponent(txt_Password)
-                    .addComponent(txt_ConfirmPassword)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                        .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btn_Login, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(11, 11, 11)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lbl_ConfirmPassword, javax.swing.GroupLayout.DEFAULT_SIZE, 256, Short.MAX_VALUE)
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(lbl_RollNumber, javax.swing.GroupLayout.DEFAULT_SIZE, 250, Short.MAX_VALUE)
+                        .addGap(34, 34, 34)
+                        .addComponent(btn_Login, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap())
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(lbl_Password, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(lbl_ContactNumber, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(12, 12, 12))))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(txt_StudentName)
+                            .addComponent(txt_RollNumber)
+                            .addComponent(txt_DateOfBirth, javax.swing.GroupLayout.DEFAULT_SIZE, 187, Short.MAX_VALUE)
+                            .addComponent(txt_FatherName)
+                            .addComponent(txt_ContactNumber, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(txt_Email)
+                            .addComponent(txt_Password)
+                            .addComponent(txt_ConfirmPassword))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lbl_ConfirmPassword, javax.swing.GroupLayout.DEFAULT_SIZE, 256, Short.MAX_VALUE)
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addComponent(lbl_RollNumber, javax.swing.GroupLayout.DEFAULT_SIZE, 250, Short.MAX_VALUE)
+                                .addContainerGap())
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(lbl_Password, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(lbl_ContactNumber, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addGap(12, 12, 12))
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addComponent(jLabel12)
+                                .addGap(0, 0, Short.MAX_VALUE))))))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -477,23 +507,23 @@ public class SignuUpPage extends javax.swing.JFrame {
                             .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txt_ConfirmPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(btn_SignUp, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(btn_Login, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btn_SignUp, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btn_Login, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGap(26, 26, 26)
                         .addComponent(lbl_Password, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(lbl_ConfirmPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(35, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel12)
+                .addContainerGap())
         );
 
         getContentPane().add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 260, 690, 540));
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void txt_StudentNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_StudentNameActionPerformed
@@ -517,11 +547,16 @@ public class SignuUpPage extends javax.swing.JFrame {
     }//GEN-LAST:event_txt_EmailActionPerformed
 
     private void btn_SignUpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_SignUpActionPerformed
-validation();        // TODO add your handling code here:
+        
+        if(validation())
+    {
+    insertDetails();}// TODO add your handling code here:
     }//GEN-LAST:event_btn_SignUpActionPerformed
 
     private void btn_LoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_LoginActionPerformed
-        // TODO add your handling code here:
+       LoginPage loginpage = new LoginPage();
+       loginpage.show();
+       this.dispose();
     }//GEN-LAST:event_btn_LoginActionPerformed
 
     private void txt_RollNumberKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_RollNumberKeyPressed
@@ -583,6 +618,8 @@ checkConfirmPAssword();        // TODO add your handling code here:
         }
         //</editor-fold>
         /* Create and display the form */
+       
+
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new SignuUpPage().setVisible(true);
@@ -598,7 +635,6 @@ checkConfirmPAssword();        // TODO add your handling code here:
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
