@@ -1,4 +1,4 @@
-Title : Fees Management System 
+Title : Fees Management System - a Desktop application
  
  Technologies used : Core Java , java Swing , MySql , JDBC api , Apache POI.
  IDE : Apache Netbeans IDE 
